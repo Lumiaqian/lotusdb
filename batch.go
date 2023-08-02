@@ -155,7 +155,8 @@ func (b *Batch) Delete(key []byte) error {
 		b.mu.Unlock()
 		return err
 	}
-	if position != nil {
+	isDel, _ := b.db.activeMem.get(key)
+	if position != nil || !isDel {
 		// write to pendingWrites if the key exists
 		b.pendingWrites[string(key)] = &LogRecord{
 			Key:  key,
